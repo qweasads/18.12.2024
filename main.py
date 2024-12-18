@@ -35,10 +35,7 @@ def get_user_id_by_name(username):
     query = "SELECT id FROM users WHERE username = %s"
     cursor.execute(query, (username,))
     result = cursor.fetchone()
-    if result:
-        return result[0]
-    else:
-        return None
+    return result[0] if result else None
 
 
 def add_transaction():
@@ -123,21 +120,23 @@ def show_report():
                         pdf.add_font('DejaVu', '', 'DejaVuSans.ttf', uni=True)
                         pdf.set_font('DejaVu', size=12)
 
+
                         pdf.cell(200, 10, txt=f"Отчет доходов и расходов пользователя {username}", ln=True, align='C')
                         pdf.ln(10)
+
+
                         pdf.cell(100, 10, txt=f"Доход: {amounts['Доход']:.2f}", ln=True)
                         pdf.cell(100, 10, txt=f"Расход: {amounts['Расход']:.2f}", ln=True)
-                        pdf.ln(10)
                         pdf.cell(100, 10, txt=f"Баланс: {amounts['Доход'] - amounts['Расход']:.2f}", ln=True)
-
                         pdf.ln(10)
-                        pdf.cell(200, 10, txt="Детализация по категориям:", ln=True)
 
+
+                        pdf.cell(200, 10, txt="Детализация по категориям:", ln=True)
                         for i, (label, size) in enumerate(zip(labels, sizes)):
                             pdf.cell(100, 10, txt=f"{label}: {size:.2f} ({sizes[i] / sum(sizes) * 100:.1f}%)", ln=True)
 
                         pdf.output(file_name)
-                        messagebox.showinfo("Успех", "PDF отчет успешно сохранен!")
+                        messagebox.showinfo("Успех", f"PDF отчет сохранен как {file_name}")
 
                 btn_save_pdf = ttk.Button(report_window, text="Сохранить как PDF", command=save_pdf)
                 btn_save_pdf.pack()
@@ -152,7 +151,13 @@ def show_report():
 
 root = tk.Tk()
 root.title("Expense Tracker")
-root.geometry("400x400")
+root.geometry("400x500")
+
+
+style = ttk.Style()
+style.configure("TButton", font=("Arial", 12), padding=5)
+style.configure("TLabel", font=("Arial", 12))
+style.configure("TEntry", font=("Arial", 12))
 
 
 notebook = ttk.Notebook(root)
@@ -168,67 +173,52 @@ notebook.add(frame_report, text="Отчет")
 notebook.pack(expand=True, fill="both")
 
 
-label_username = ttk.Label(frame_register, text="Имя пользователя:")
-label_username.pack()
+ttk.Label(frame_register, text="Имя пользователя:").pack(pady=5)
 entry_username = ttk.Entry(frame_register)
-entry_username.pack()
+entry_username.pack(pady=5)
 
-label_password = ttk.Label(frame_register, text="Пароль:")
-label_password.pack()
+ttk.Label(frame_register, text="Пароль:").pack(pady=5)
 entry_password = ttk.Entry(frame_register, show="*")
-entry_password.pack()
+entry_password.pack(pady=5)
 
-label_email = ttk.Label(frame_register, text="Email:")
-label_email.pack()
+ttk.Label(frame_register, text="Email:").pack(pady=5)
 entry_email = ttk.Entry(frame_register)
-entry_email.pack()
+entry_email.pack(pady=5)
 
-btn_register = ttk.Button(frame_register, text="Зарегистрироваться", command=register_user)
-btn_register.pack()
+ttk.Button(frame_register, text="Зарегистрироваться", command=register_user).pack(pady=10)
 
 
-label_user_name_transaction = ttk.Label(frame_transaction, text="Имя пользователя:")
-label_user_name_transaction.pack()
+ttk.Label(frame_transaction, text="Имя пользователя:").pack(pady=5)
 entry_user_name_transaction = ttk.Entry(frame_transaction)
-entry_user_name_transaction.pack()
+entry_user_name_transaction.pack(pady=5)
 
-label_amount = ttk.Label(frame_transaction, text="Сумма:")
-label_amount.pack()
+ttk.Label(frame_transaction, text="Сумма:").pack(pady=5)
 entry_amount = ttk.Entry(frame_transaction)
-entry_amount.pack()
+entry_amount.pack(pady=5)
 
-label_category = ttk.Label(frame_transaction, text="Категория:")
-label_category.pack()
+ttk.Label(frame_transaction, text="Категория:").pack(pady=5)
 entry_category = ttk.Entry(frame_transaction)
-entry_category.pack()
+entry_category.pack(pady=5)
 
-label_type = ttk.Label(frame_transaction, text="Тип:")
-label_type.pack()
+ttk.Label(frame_transaction, text="Тип:").pack(pady=5)
 combobox_type = ttk.Combobox(frame_transaction, values=["Доход", "Расход"], state="readonly")
-combobox_type.pack()
+combobox_type.pack(pady=5)
 
-btn_add_transaction = ttk.Button(frame_transaction, text="Добавить", command=add_transaction)
-btn_add_transaction.pack()
+ttk.Button(frame_transaction, text="Добавить", command=add_transaction).pack(pady=10)
 
 
-label_user_name_balance = ttk.Label(frame_balance, text="Имя пользователя:")
-label_user_name_balance.pack()
+ttk.Label(frame_balance, text="Имя пользователя:").pack(pady=5)
 entry_user_name_balance = ttk.Entry(frame_balance)
-entry_user_name_balance.pack()
+entry_user_name_balance.pack(pady=5)
 
-btn_show_balance = ttk.Button(frame_balance, text="Показать баланс", command=show_balance)
-btn_show_balance.pack()
+ttk.Button(frame_balance, text="Показать баланс", command=show_balance).pack(pady=10)
 
 
-label_user_name_report = ttk.Label(frame_report, text="Имя пользователя:")
-label_user_name_report.pack()
+ttk.Label(frame_report, text="Имя пользователя:").pack(pady=5)
 entry_user_name_report = ttk.Entry(frame_report)
-entry_user_name_report.pack()
+entry_user_name_report.pack(pady=5)
 
-btn_show_report = ttk.Button(frame_report, text="Показать отчет", command=show_report)
-btn_show_report.pack()
+ttk.Button(frame_report, text="Показать отчет", command=show_report).pack(pady=10)
 
 root.mainloop()
-
-
 conn.close()
