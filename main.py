@@ -204,7 +204,7 @@ entry_category.pack()
 
 label_type = ttk.Label(frame_transaction, text="Тип:")
 label_type.pack()
-combobox_type = ttk.Combobox(frame_transaction, values=["income", "expense"], state="readonly")
+combobox_type = ttk.Combobox(frame_transaction, values=["Доход", "Расход"], state="readonly")
 combobox_type.pack()
 
 btn_add_transaction = ttk.Button(frame_transaction, text="Добавить", command=add_transaction)
