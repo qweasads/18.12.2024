@@ -11,7 +11,7 @@ from fpdf import FPDF
 conn = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="7878",
+    password="",
     database="expense_tracker_db"
 )
 cursor = conn.cursor()
@@ -86,7 +86,7 @@ def show_report():
             cursor.execute(query, (user_id,))
             result = cursor.fetchall()
             if result:
-                labels = ["Доход" if row[0] == "income" else "Расход" for row in result]
+                labels = ["Доход" if row[0] == "income" else "expense" for row in result]
                 sizes = [row[1] for row in result]
                 amounts = {"Доход": 0, "Расход": 0}
                 for row in result:
@@ -150,7 +150,7 @@ def show_report():
 
 
 root = tk.Tk()
-root.title("Expense Tracker")
+root.title("Учет расходов и доходов")
 root.geometry("400x500")
 
 
@@ -201,7 +201,7 @@ entry_category = ttk.Entry(frame_transaction)
 entry_category.pack(pady=5)
 
 ttk.Label(frame_transaction, text="Тип:").pack(pady=5)
-combobox_type = ttk.Combobox(frame_transaction, values=["Доход", "Расход"], state="readonly")
+combobox_type = ttk.Combobox(frame_transaction, values=["income", "expense"], state="readonly")
 combobox_type.pack(pady=5)
 
 ttk.Button(frame_transaction, text="Добавить", command=add_transaction).pack(pady=10)
